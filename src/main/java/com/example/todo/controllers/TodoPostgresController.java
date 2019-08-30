@@ -23,6 +23,7 @@ public class TodoPostgresController {
     }
 
     @PostMapping("")
+    @ResponseBody
     public ResponseEntity<Todo> addTodo(@RequestBody Todo todo) {
         Todo inserted = todoService.addTodo(todo);
         return new ResponseEntity<>(inserted, HttpStatus.CREATED);

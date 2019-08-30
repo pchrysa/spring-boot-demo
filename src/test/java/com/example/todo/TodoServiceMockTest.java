@@ -4,7 +4,6 @@ import com.example.todo.controllers.TodoPostgresController;
 import com.example.todo.models.Todo;
 import com.example.todo.service.TodoService;
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import com.google.gson.reflect.TypeToken;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -43,6 +43,7 @@ public class TodoServiceMockTest {
             add(new Todo(2, "test 2", false));
             add(new Todo(3, "test 3", true));
         }});
+        Mockito.when(todoService.addTodo(any(Todo.class))).thenReturn(new Todo(4, "XOXO", true));
     }
 
     @Test
@@ -87,11 +88,14 @@ public class TodoServiceMockTest {
 
         mvc.perform( MockMvcRequestBuilders
                 .post("/todoapp")
-                .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(todoJsonStr)
-                .accept(MediaType.APPLICATION_JSON_UTF8))
+                .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(status().isCreated());
+                .andExpect(status().isCreated())
+                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.text").value("XOXO"))
+                .andReturn();
     }
 
     @Test
