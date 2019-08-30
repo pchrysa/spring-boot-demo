@@ -2,7 +2,7 @@ package com.example.todo.models;
 
 public class Todo {
 
-    private long id;
+    private int id;
     private String text;
     private boolean isCompleted;
 
@@ -19,7 +19,7 @@ public class Todo {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
